@@ -187,9 +187,13 @@ const data = [
     header.headerContainer.append(logo);
     main.mainContainer.append(buttonGroup.btnWrapper, table, form.overlay);
     app.append(header, main, footer);
+    console.log(form.overlay);
 
     return {
       list: table.tbody,
+      logo,
+      btnAdd: buttonGroup.btns[0],
+      formOverLay: form.overlay,
     };
   };
 
@@ -210,6 +214,7 @@ const data = [
     const phoneLink = document.createElement('a');
     phoneLink.href = `tel:${phone} `;
     phoneLink.textContent = phone;
+    tr.phoneLink = phoneLink;
 
     tdPhone.append(phoneLink);
 
@@ -221,16 +226,44 @@ const data = [
   const renderContacts = (elem, data) => {
     const allRow = data.map(createRow);
     elem.append(...allRow);
+    return allRow;
+  };
+
+  const hoverRow = (allRow, logo) => {
+    const text = logo.textContent;
+
+    allRow.forEach(contact => {
+      contact.addEventListener('mouseenter', () => {
+        logo.textContent = contact.phoneLink.textContent;
+      });
+      contact.addEventListener('mouseleave', () => {
+        logo.textContent = text;
+      });
+    });
   };
 
   const init = (selectorApp, title) => {
     const app = document.querySelector(selectorApp);
     const phoneBook = renderPhoneBook(app, title);
 
-    const { list } = phoneBook;
+    const { list, logo, btnAdd, formOverlay } = phoneBook;
+    console.log(phoneBook);
 
-    renderContacts(list, data);
     //Функционал
+
+    const allRow = renderContacts(list, data);
+
+    hoverRow(allRow, logo);
+
+    const objEvent = {
+      handleEvent() {
+        console.log(formOverlay);
+        formOverlay.classList.add('is-visible');
+      },
+    };
+
+    console.log(objEvent);
+    btnAdd.addEventListener('click', objEvent);
   };
 
   window.phoneBookInit = init;
