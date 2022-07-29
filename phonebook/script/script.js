@@ -187,13 +187,12 @@ const data = [
     header.headerContainer.append(logo);
     main.mainContainer.append(buttonGroup.btnWrapper, table, form.overlay);
     app.append(header, main, footer);
-    console.log(form.overlay);
 
     return {
       list: table.tbody,
       logo,
       btnAdd: buttonGroup.btns[0],
-      formOverLay: form.overlay,
+      formOverlay: form.overlay,
     };
   };
 
@@ -247,7 +246,6 @@ const data = [
     const phoneBook = renderPhoneBook(app, title);
 
     const { list, logo, btnAdd, formOverlay } = phoneBook;
-    console.log(phoneBook);
 
     //Функционал
 
@@ -257,12 +255,10 @@ const data = [
 
     const objEvent = {
       handleEvent() {
-        console.log(formOverlay);
         formOverlay.classList.add('is-visible');
       },
     };
 
-    console.log(objEvent);
     btnAdd.addEventListener('click', objEvent);
   };
 
