@@ -1,32 +1,53 @@
 'use strict';
 
-const data = [
-  {
-    name: 'Иван',
-    surname: 'Петров',
-    phone: '+79514545454',
-  },
-  {
-    name: 'Петр',
-    surname: 'Семёнов',
-    phone: '+79999999999',
-  },
-  {
-    name: 'Семён',
-    surname: 'Иванов',
-    phone: '+79800252525',
-  },
-  {
-    name: 'Мария',
-    surname: 'Попова',
-    phone: '+79876543210',
-  },
-];
+// const dataFirst = [
+//   {
+//     name: 'Иван',
+//     surname: 'Петров',
+//     phone: '+79514545454',
+//   },
+//   {
+//     name: 'Петр',
+//     surname: 'Семёнов',
+//     phone: '+79999999999',
+//   },
+//   {
+//     name: 'Семён',
+//     surname: 'Иванов',
+//     phone: '+79800252525',
+//   },
+//   {
+//     name: 'Мария',
+//     surname: 'Попова',
+//     phone: '+79876543210',
+//   },
+// ];
+
+// localStorage.setItem('data', JSON.stringify(dataFirst));
+
 
 {
+  const getStorage = (key) => {
+    let base = JSON.parse(localStorage.getItem(key));
+    if (base === null)
+      base = [];
+    return base;
+  };
+  let data = getStorage('data');
+
+  const setStorage = (key, base) => {
+    localStorage.setItem(key, JSON.stringify(base));
+  }
+
+  const removeStorage = (name, tel) => {
+    const dataNew = data.filter(item => (item.name !== name && item.phone !== tel));
+    localStorage.setItem('data', JSON.stringify(dataNew));
+    return dataNew;
+  }
+
   const addContactData = contact => {
     data.push(contact);
-    console.log('data: ', data);
+    setStorage('data', data);
   };
 
   const createContainer = () => {
@@ -187,7 +208,6 @@ const data = [
     ]);
     const table = createTable();
     const { form, overlay } = createForm();
-    console.log(form);
     const footer = createFooter(title);
 
     header.headerContainer.append(logo);
@@ -284,6 +304,9 @@ const data = [
 
     list.addEventListener('click', e => {
       if (e.target.closest('.del-icon')) {
+        const tel = e.target.closest('.contact').querySelector('td > a').textContent;
+        const name = e.target.closest('.contact').querySelector('td:nth-child(2)').textContent;
+        data = removeStorage(name, tel);
         e.target.closest('.contact').remove();
       }
     });
@@ -330,6 +353,8 @@ const data = [
     formControl(form, list, closeModal);
 
   };
+
+
 
   window.phoneBookInit = init;
 }
