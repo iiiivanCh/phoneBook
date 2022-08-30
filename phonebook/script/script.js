@@ -1,46 +1,26 @@
 'use strict';
 
-// const dataFirst = [
-//   {
-//     name: 'Иван',
-//     surname: 'Петров',
-//     phone: '+79514545454',
-//   },
-//   {
-//     name: 'Петр',
-//     surname: 'Семёнов',
-//     phone: '+79999999999',
-//   },
-//   {
-//     name: 'Семён',
-//     surname: 'Иванов',
-//     phone: '+79800252525',
-//   },
-//   {
-//     name: 'Мария',
-//     surname: 'Попова',
-//     phone: '+79876543210',
-//   },
-// ];
-
-// localStorage.setItem('data', JSON.stringify(dataFirst));
-
-
 {
-  const getStorage = (key) => {
-    let base = JSON.parse(localStorage.getItem(key));
-    if (base === null)
-      base = [];
-    return base;
-  };
-  let data = getStorage('data');
-
   const setStorage = (key, base) => {
     localStorage.setItem(key, JSON.stringify(base));
   }
 
-  const removeStorage = (name, tel) => {
-    const dataNew = data.filter(item => (item.name !== name && item.phone !== tel));
+  const getStorage = (key) => {
+    let base = JSON.parse(localStorage.getItem(key));
+    if (base === null)
+      return base = [];
+    base = base.map((item) => {
+      item.idNumber = Math.round(Math.random() * (99999999));
+      return item;
+    });
+    setStorage('data', base);
+    return base;
+  };
+  let data = getStorage('data');
+
+
+  const removeStorage = (idNumberCheck) => {
+    const dataNew = data.filter(item => String(item.idNumber) !== idNumberCheck);
     localStorage.setItem('data', JSON.stringify(dataNew));
     return dataNew;
   }
@@ -224,9 +204,10 @@
     };
   };
 
-  const createRow = ({ name: firstName, surname, phone }) => {
+  const createRow = ({ name: firstName, surname, phone, idNumber }) => {
     const tr = document.createElement('tr');
     tr.classList.add('contact');
+    tr.id = idNumber;
     const tdDel = document.createElement('td');
     tdDel.classList.add('delete');
     const buttonDel = document.createElement('button');
@@ -304,9 +285,8 @@
 
     list.addEventListener('click', e => {
       if (e.target.closest('.del-icon')) {
-        const tel = e.target.closest('.contact').querySelector('td > a').textContent;
-        const name = e.target.closest('.contact').querySelector('td:nth-child(2)').textContent;
-        data = removeStorage(name, tel);
+        const idNumber = e.target.closest('.contact').id;
+        data = removeStorage(idNumber);
         e.target.closest('.contact').remove();
       }
     });
@@ -320,6 +300,7 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
       const formData = new FormData(e.target);
+      formData.append('idNumber', Math.round(Math.random() * (99999999)));
 
       const newContact = Object.fromEntries(formData);
 
