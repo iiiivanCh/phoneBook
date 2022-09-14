@@ -1,5 +1,10 @@
-import addContactData from './serviceStorage';
-import createRow from './serviceStorage';
+import {
+  addContactData,
+} from './serviceStorage.js';
+
+import {
+  createRow,
+} from './createElements.js';
 
 const hoverRow = (allRow, logo) => {
   const text = logo.textContent;

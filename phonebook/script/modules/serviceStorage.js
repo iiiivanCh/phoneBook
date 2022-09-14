@@ -1,6 +1,6 @@
 
 
-export const setStorage = (key, base) => {
+const setStorage = (key, base) => {
   localStorage.setItem(key, JSON.stringify(base));
 };
 
@@ -19,7 +19,7 @@ const getStorage = (key) => {
 export let dat = getStorage('data');
 
 
-export const removeStorage = (idNumberCheck) => {
+const removeStorage = (idNumberCheck) => {
   const dataNew = dat.filter(item => String(item.idNumber) !== idNumberCheck);
   localStorage.setItem('data', JSON.stringify(dataNew));
   return dataNew;
@@ -46,3 +46,9 @@ export const deleteControl = (btnDel, list) => {
     }
   });
 };
+
+// export {
+//   deleteControl,
+//   addContactData,
+//   dat,
+// };

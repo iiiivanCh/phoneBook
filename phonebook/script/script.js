@@ -1,8 +1,10 @@
-import dat from './serviceStorage';
+import {
+  dat,
+  deleteControl,
+} from './modules/serviceStorage.js';
 import {
   hoverRow,
   modalControl,
-  deleteControl,
   formControl,
 } from './modules/control.js';
 import {
